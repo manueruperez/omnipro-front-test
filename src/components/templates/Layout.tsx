@@ -1,5 +1,7 @@
 import MainLayout from "#organisms/MainLayout.tsx";
 
-const AppLayout = () => <MainLayout />;
+const AppLayout = () => {
+  return <MainLayout />;
+};
 
 export default AppLayout;

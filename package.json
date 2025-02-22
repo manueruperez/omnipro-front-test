@@ -61,6 +61,7 @@
     "#molecules/*": "./src/components/molecules/*",
     "#organisms/*": "./src/components/organisms/*",
     "#templates/*": "./src/components/templates/*",
-    "#modules/*": "./src/modules/*"
+    "#modules/*": "./src/modules/*",
+    "#store/*": "./src/store/*"
   }
 }
