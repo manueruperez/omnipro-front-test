@@ -1,37 +1,66 @@
 // src/molecules/TaskModalForm.tsx
-import React from "react";
+import React, { useEffect } from "react";
 import { Modal, Form, Input, DatePicker, Select, Button } from "antd";
 import { useDispatch } from "react-redux";
-import { addTask, Task } from "#modules/tasks/tasks.reducer.ts"; // Ajusta la ruta
-import { addTaskToProject } from "#modules/projects/project.reducer.ts"; // Ajusta la ruta
+import { addTask, updateTask, Task } from "#modules/tasks/tasks.reducer.ts";
+import { addTaskToProject } from "#modules/projects/project.reducer.ts";
+import moment from "moment";
 
 interface TaskModalFormProps {
   visible: boolean;
   onClose: () => void;
   projectId: number;
+  taskToEdit?: Task;
 }
 
 const TaskModalForm: React.FC<TaskModalFormProps> = ({
   visible,
   onClose,
   projectId,
+  taskToEdit,
 }) => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    if (taskToEdit) {
+      form.setFieldsValue({
+        title: taskToEdit.title,
+        description: taskToEdit.description,
+        dueDate: taskToEdit.dueDate ? moment(taskToEdit.dueDate) : null,
+        status: taskToEdit.status,
+        priority: taskToEdit.priority,
+      });
+    } else {
+      form.resetFields();
+    }
+  }, [taskToEdit, form]);
+
   const onFinish = (values: any) => {
-    const taskData: Omit<Task, "id"> = {
-      title: values.title,
-      description: values.description,
-      dueDate: values.dueDate ? values.dueDate.toISOString() : undefined,
-      status: values.status,
-      priority: values.priority,
-    };
-
-    const actionResult = dispatch(addTask(taskData));
-    const newTaskId = actionResult.payload.id;
-
-    dispatch(addTaskToProject({ projectId, taskId: newTaskId }));
+    if (taskToEdit) {
+      // Modo edición: actualiza la tarea existente
+      const updatedTask: Task = {
+        ...taskToEdit,
+        title: values.title,
+        description: values.description,
+        dueDate: values.dueDate ? values.dueDate.toISOString() : undefined,
+        status: values.status,
+        priority: values.priority,
+      };
+      dispatch(updateTask(updatedTask));
+    } else {
+      // Modo creación: agrega una nueva tarea
+      const taskData: Omit<Task, "id"> = {
+        title: values.title,
+        description: values.description,
+        dueDate: values.dueDate ? values.dueDate.toISOString() : undefined,
+        status: values.status,
+        priority: values.priority,
+      };
+      const actionResult = dispatch(addTask(taskData));
+      const newTaskId = actionResult.payload.id;
+      dispatch(addTaskToProject({ projectId, taskId: newTaskId }));
+    }
 
     form.resetFields();
     onClose();
@@ -39,8 +68,8 @@ const TaskModalForm: React.FC<TaskModalFormProps> = ({
 
   return (
     <Modal
-      title="Agregar Tarea"
-      visible={visible}
+      title={taskToEdit ? "Editar Tarea" : "Agregar Tarea"}
+      open={visible}
       onCancel={onClose}
       footer={null}
     >
@@ -87,7 +116,7 @@ const TaskModalForm: React.FC<TaskModalFormProps> = ({
 
         <Form.Item>
           <Button type="primary" htmlType="submit">
-            Agregar Tarea
+            {taskToEdit ? "Actualizar Tarea" : "Agregar Tarea"}
           </Button>
         </Form.Item>
       </Form>
