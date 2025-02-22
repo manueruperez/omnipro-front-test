@@ -43,7 +43,6 @@ const MainLayout = () => {
         <Layout style={{ padding: "16px" }}>
           <Content
             style={{
-              background: "#fff",
               padding: 24,
               minHeight: 280,
             }}
