@@ -1,4 +1,5 @@
 import { Layout, Menu } from "antd";
+import { useNavigate } from "react-router-dom";
 
 const { Sider } = Layout;
 
@@ -13,10 +14,19 @@ const Sidebar: React.FC<SidebarProps> = ({
   onCollapse,
   menuItems,
 }) => {
-  const itemsLabels = menuItems.map((item, index) => ({
-    key: index,
+  const navigate = useNavigate();
+
+  // Mapeamos correctamente los items con la clave `route`
+  const itemsLabels = menuItems.map((item) => ({
+    key: item.route, // Usar `route` como clave única
     label: item.label,
   }));
+
+  // Manejar la navegación al hacer clic en un elemento del menú
+  const handleMenuClick = (e: { key: string }) => {
+    navigate(e.key); // `key` ahora es la `route`
+  };
+
   return (
     <Sider
       collapsible
@@ -29,8 +39,9 @@ const Sidebar: React.FC<SidebarProps> = ({
       <Menu
         theme="dark"
         mode="inline"
-        defaultSelectedKeys={["1"]}
+        defaultSelectedKeys={[menuItems[0]?.route]} // Selección inicial
         items={itemsLabels}
+        onClick={handleMenuClick} // Redirige al hacer clic
       />
     </Sider>
   );

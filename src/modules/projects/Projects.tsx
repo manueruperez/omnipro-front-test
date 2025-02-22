@@ -2,7 +2,7 @@ const Projects = () => {
   return (
     <>
       {" "}
-      <p>Hola desde el home !!!</p>
+      <p>Hola desde Projects !!!</p>
     </>
   );
 };
