@@ -1,57 +1,82 @@
-import React, { useState } from "react";
+// src/molecules/projectModalForm/ProjectModalForm.tsx
+import React, { useState, useEffect } from "react";
 import { Modal, Input } from "antd";
 import { useDispatch } from "react-redux";
-import { Project, addProject } from "#modules/projects/project.reducer.ts";
+import {
+  Project,
+  addProject,
+  updateProject,
+} from "#modules/projects/project.reducer.ts";
 
 interface ProjectModalFormProps {
   visible: boolean;
   onClose: () => void;
+  projectToEdit?: Project;
 }
 
 const ProjectModalForm: React.FC<ProjectModalFormProps> = ({
   visible,
   onClose,
+  projectToEdit,
 }) => {
   const dispatch = useDispatch();
-  const [newProjectName, setNewProjectName] = useState("");
-  const [newProjectDescription, setNewProjectDescription] = useState("");
+  const [projectName, setProjectName] = useState("");
+  const [projectDescription, setProjectDescription] = useState("");
+
+  useEffect(() => {
+    if (projectToEdit) {
+      setProjectName(projectToEdit.name);
+      setProjectDescription(projectToEdit.description);
+    } else {
+      setProjectName("");
+      setProjectDescription("");
+    }
+  }, [projectToEdit]);
 
   const handleOk = () => {
-    if (!newProjectName.trim()) return; // Evita agregar si el nombre está vacío
+    if (!projectName.trim()) return; // Evita agregar/actualizar si el nombre está vacío
 
-    const newProject: Project = {
-      id: Date.now(),
-      name: newProjectName,
-      description: newProjectDescription,
-      taskIds: [],
-    };
-
-    dispatch(addProject(newProject));
-    setNewProjectName("");
-    setNewProjectDescription("");
+    if (projectToEdit) {
+      // Modo edición: actualiza el proyecto existente
+      const updatedProject: Project = {
+        ...projectToEdit,
+        name: projectName,
+        description: projectDescription,
+      };
+      dispatch(updateProject(updatedProject));
+    } else {
+      // Modo creación: agrega un nuevo proyecto
+      const newProject: Project = {
+        id: Date.now(),
+        name: projectName,
+        description: projectDescription,
+        taskIds: [],
+      };
+      dispatch(addProject(newProject));
+    }
     onClose();
   };
 
   return (
     <Modal
-      title="Crear Nuevo Proyecto"
+      title={projectToEdit ? "Editar Proyecto" : "Crear Nuevo Proyecto"}
       visible={visible}
       onOk={handleOk}
       onCancel={onClose}
-      okText="Crear"
+      okText={projectToEdit ? "Actualizar" : "Crear"}
     >
       <div>
         <Input
           placeholder="Nombre del proyecto"
-          value={newProjectName}
-          onChange={(e) => setNewProjectName(e.target.value)}
+          value={projectName}
+          onChange={(e) => setProjectName(e.target.value)}
         />
       </div>
       <div style={{ marginTop: 16 }}>
         <Input.TextArea
           placeholder="Descripción del proyecto"
-          value={newProjectDescription}
-          onChange={(e) => setNewProjectDescription(e.target.value)}
+          value={projectDescription}
+          onChange={(e) => setProjectDescription(e.target.value)}
           rows={4}
         />
       </div>

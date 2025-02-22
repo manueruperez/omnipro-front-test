@@ -4,7 +4,7 @@ export interface Project {
   id: number;
   name: string;
   description: string;
-  taskIds: number[]; // Referencias a los IDs de las tareas asociadas
+  taskIds: number[];
 }
 
 interface ProjectsState {

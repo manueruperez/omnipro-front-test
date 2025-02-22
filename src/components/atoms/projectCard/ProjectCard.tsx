@@ -1,22 +1,36 @@
-// src/components/atoms/ProjectCard.tsx
 import React from "react";
 import { Card } from "antd";
-import { Project } from "#modules/projects/project.reducer.ts";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+const { Meta } = Card;
 
 interface ProjectCardProps {
-  project: Project;
+  project: { name: string; description: string; id: number };
   onClick: () => void;
+  onEditClick: (id: number) => void;
+  onDeleteClick: (id: number) => void;
 }
 
-const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick }) => {
+const ProjectCard: React.FC<ProjectCardProps> = ({
+  project,
+  onClick,
+  onDeleteClick,
+  onEditClick,
+}) => {
   return (
     <Card
-      title={project.name}
       hoverable
-      onClick={onClick}
       style={{ width: 300, margin: "1rem", cursor: "pointer" }}
+      actions={[
+        <EditOutlined key="edit" onClick={() => onEditClick(project.id)} />,
+        <DeleteOutlined
+          key="delete"
+          onClick={() => onDeleteClick(project.id)}
+        />,
+      ]}
     >
-      <p>{project.description}</p>
+      <div onClick={onClick}>
+        <Meta title={project.name} description={project.description} />
+      </div>
     </Card>
   );
 };
