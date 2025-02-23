@@ -1,5 +1,6 @@
 import { Layout, Menu, theme } from "antd";
 import { useNavigate } from "react-router-dom";
+import "./sideBar.css";
 
 const { Sider } = Layout;
 
@@ -16,24 +17,22 @@ const Sidebar: React.FC<SidebarProps> = ({
 }) => {
   const navigate = useNavigate();
 
-  // Obtenemos el token que contiene el color de fondo actualizado según el tema
   const {
     token: { colorBgContainer },
   } = theme.useToken();
 
-  // Mapeamos los items usando `route` como clave única
   const itemsLabels = menuItems.map((item) => ({
     key: item.route,
     label: item.label,
   }));
 
-  // Manejar la navegación al hacer clic en un elemento del menú
   const handleMenuClick = (e: { key: string }) => {
     navigate(e.key);
   };
 
   return (
     <Sider
+      className="custom-sider"
       collapsible
       collapsed={collapsed}
       onCollapse={onCollapse}
@@ -42,6 +41,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       style={{ background: colorBgContainer }}
     >
       <Menu
+        className="custom-menu"
         theme="dark"
         mode="inline"
         defaultSelectedKeys={[menuItems[0]?.route]}

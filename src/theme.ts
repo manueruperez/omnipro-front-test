@@ -8,7 +8,7 @@ export const lightTheme: ThemeConfig = {
 
     colorText: "#000000",
 
-    colorBgContainer: "#4d4d4d",
+    colorBgContainer: "#ffffff",
   },
 };
 
@@ -20,6 +20,6 @@ export const darkTheme: ThemeConfig = {
 
     colorText: "#ffffff",
 
-    colorBgContainer: "#1a1a1a",
+    colorBgContainer: "#4d4d4d",
   },
 };

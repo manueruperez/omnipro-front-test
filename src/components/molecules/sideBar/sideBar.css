@@ -1,0 +1,22 @@
+aside.custom-sider {
+  ul.custom-menu {
+    li {
+      span.ant-menu-title-content {
+        color: var(--primary-color);
+      }
+    }
+
+    li.ant-menu-item-selected {
+      span.ant-menu-title-content {
+        color: var(--white);
+      }
+    }
+  }
+  span.ant-layout-sider-zero-width-trigger.ant-layout-sider-zero-width-trigger-left {
+    background: none;
+    color: var(--primary-color);
+    &::after {
+      border-radius: 50%;
+    }
+  }
+}
