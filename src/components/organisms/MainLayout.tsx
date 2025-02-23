@@ -29,8 +29,6 @@ const MainLayout = () => {
             onCollapse={setCollapsed}
           />
         )}
-
-        {/* Drawer solo visible en móviles */}
         {!screens.md && (
           <DrawerMenu
             menuItems={menuItems}

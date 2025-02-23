@@ -4,4 +4,5 @@ header.HeaderWrapper {
   height: 100%;
   justify-content: space-between;
   align-items: center;
+  border-bottom: 1px var(--gray-500) solid;
 }

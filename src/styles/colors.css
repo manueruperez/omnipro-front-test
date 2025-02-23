@@ -1,5 +1,10 @@
 :root {
   --primary-color: #73d13d;
+  --primary-transparent: rgba(115, 209, 61, 0.3);
+  /* gray-scale */
+  --gray-500: #f5f5f5;
   /* colors */
   --white: #fff;
+  --white-transparent: rgba(255, 255, 255, 0.3);
+  --black-transparent: rgba(0, 0, 0, 0.3);
 }

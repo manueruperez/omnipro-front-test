@@ -1,6 +1,8 @@
 import { Layout, Menu, theme } from "antd";
 import { useNavigate } from "react-router-dom";
 import "./sideBar.css";
+import { useSelector } from "react-redux";
+import { AppState } from "#store/store.ts";
 
 const { Sider } = Layout;
 
@@ -15,6 +17,8 @@ const Sidebar: React.FC<SidebarProps> = ({
   onCollapse,
   menuItems,
 }) => {
+  const currentTheme = useSelector((state: AppState) => state.theme.theme);
+
   const navigate = useNavigate();
 
   const {
@@ -38,7 +42,12 @@ const Sidebar: React.FC<SidebarProps> = ({
       onCollapse={onCollapse}
       breakpoint="md"
       collapsedWidth="0"
-      style={{ background: colorBgContainer }}
+      style={{
+        background:
+          currentTheme === "light"
+            ? "var(--white-transparent)"
+            : "--black-transparent",
+      }}
     >
       <Menu
         className="custom-menu"
@@ -47,7 +56,12 @@ const Sidebar: React.FC<SidebarProps> = ({
         defaultSelectedKeys={[menuItems[0]?.route]}
         items={itemsLabels}
         onClick={handleMenuClick}
-        style={{ background: colorBgContainer }}
+        style={{
+          background:
+            currentTheme === "light"
+              ? "var(--white-transparent)"
+              : "--black-transparent",
+        }}
       />
     </Sider>
   );
