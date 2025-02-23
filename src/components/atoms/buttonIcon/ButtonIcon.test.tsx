@@ -3,7 +3,7 @@ import { render, fireEvent } from "@testing-library/react";
 import ButtonIcon from "./ButtonIcon";
 
 describe("ButtonIcon", () => {
-  it("llama a onClick al hacer clic", () => {
+  it("call to onClick", () => {
     const onClickMock = vi.fn();
     const { getByRole } = render(<ButtonIcon onClick={onClickMock} />);
     const button = getByRole("button");
