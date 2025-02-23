@@ -1,5 +1,5 @@
 import { Layout, Menu, theme } from "antd";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./sideBar.css";
 import { useSelector } from "react-redux";
 import { AppState } from "#store/store.ts";
@@ -18,8 +18,8 @@ const Sidebar: React.FC<SidebarProps> = ({
   menuItems,
 }) => {
   const currentTheme = useSelector((state: AppState) => state.theme.theme);
-
   const navigate = useNavigate();
+  const location = useLocation();
 
   const {
     token: { colorBgContainer },
@@ -46,14 +46,14 @@ const Sidebar: React.FC<SidebarProps> = ({
         background:
           currentTheme === "light"
             ? "var(--white-transparent)"
-            : "--black-transparent",
+            : "var(--black-transparent)",
       }}
     >
       <Menu
         className="custom-menu"
         theme="dark"
         mode="inline"
-        defaultSelectedKeys={[menuItems[0]?.route]}
+        selectedKeys={[location.pathname]}
         items={itemsLabels}
         onClick={handleMenuClick}
         style={{

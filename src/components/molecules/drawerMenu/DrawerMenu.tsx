@@ -1,5 +1,5 @@
 import { Drawer, Menu } from "antd";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 interface DrawerMenuProps {
   visible: boolean;
@@ -13,18 +13,18 @@ const DrawerMenu: React.FC<DrawerMenuProps> = ({
   menuItems,
 }) => {
   const navigate = useNavigate();
-  const itemsLabels = menuItems.map((item, index) => ({
-    key: index,
+  const location = useLocation();
+
+  const itemsLabels = menuItems.map((item) => ({
+    key: item.route,
     label: item.label,
   }));
 
-  const handleMenuClick = (key: string) => {
-    const selectedItem = menuItems[+key];
-    if (selectedItem) {
-      navigate(selectedItem.route);
-      onClose();
-    }
+  const handleMenuClick = (e: { key: string }) => {
+    navigate(e.key);
+    onClose();
   };
+
   return (
     <Drawer
       title="Menú"
@@ -35,11 +35,12 @@ const DrawerMenu: React.FC<DrawerMenuProps> = ({
     >
       <Menu
         mode="vertical"
-        defaultSelectedKeys={["1"]}
+        selectedKeys={[location.pathname]}
         items={itemsLabels}
-        onClick={(e) => handleMenuClick(e.key)}
+        onClick={handleMenuClick}
       />
     </Drawer>
   );
 };
+
 export default DrawerMenu;
