@@ -2,7 +2,7 @@
 import { useState, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { Button, Tooltip } from "antd";
+import { Button, Divider, Tooltip } from "antd";
 import { Project } from "#modules/projects/project.reducer.ts";
 import TaskModalForm from "#molecules/taskModalForm/TaskModalForm.tsx";
 import TaskCard from "#atoms/taskCard/TaskCard.tsx";
@@ -129,6 +129,8 @@ const ProjectDetail = () => {
 
   return (
     <div className="projectDetailWrapper flex flex-col justify-between gap-10">
+      <Divider orientation="left">Detalles de projecto</Divider>
+
       <div
         className="projectDataWrapper flex flex-row gap-5 items-center justify-between p-3"
         style={{
@@ -173,8 +175,10 @@ const ProjectDetail = () => {
           projectToEdit={projectToEdit}
         />
       </div>
+      <Divider orientation="right">Filtros de tareas</Divider>
 
       <TaskFilters onFiltersChange={handleFiltersChange} />
+      <Divider orientation="left">Listado de tareas</Divider>
 
       <TaskModalForm
         visible={isTaskModalVisible}
