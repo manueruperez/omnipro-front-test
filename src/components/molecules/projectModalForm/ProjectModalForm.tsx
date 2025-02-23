@@ -1,6 +1,6 @@
 // src/molecules/projectModalForm/ProjectModalForm.tsx
 import React, { useState, useEffect } from "react";
-import { Modal, Input } from "antd";
+import { Modal, Input, notification } from "antd";
 import { useDispatch } from "react-redux";
 import {
   Project,
@@ -23,6 +23,9 @@ const ProjectModalForm: React.FC<ProjectModalFormProps> = ({
   const [projectName, setProjectName] = useState("");
   const [projectDescription, setProjectDescription] = useState("");
 
+  // Hook para notificaciones
+  const [api, contextHolder] = notification.useNotification();
+
   useEffect(() => {
     if (projectToEdit) {
       setProjectName(projectToEdit.name);
@@ -34,7 +37,7 @@ const ProjectModalForm: React.FC<ProjectModalFormProps> = ({
   }, [projectToEdit]);
 
   const handleOk = () => {
-    if (!projectName.trim()) return; // Evita agregar/actualizar si el nombre está vacío
+    if (!projectName.trim()) return;
 
     if (projectToEdit) {
       // Modo edición: actualiza el proyecto existente
@@ -44,6 +47,10 @@ const ProjectModalForm: React.FC<ProjectModalFormProps> = ({
         description: projectDescription,
       };
       dispatch(updateProject(updatedProject));
+      api.success({
+        message: "Proyecto Actualizado",
+        description: "El proyecto se actualizó correctamente.",
+      });
     } else {
       // Modo creación: agrega un nuevo proyecto
       const newProject: Project = {
@@ -53,34 +60,41 @@ const ProjectModalForm: React.FC<ProjectModalFormProps> = ({
         taskIds: [],
       };
       dispatch(addProject(newProject));
+      api.success({
+        message: "Proyecto Creado",
+        description: "El proyecto se creó correctamente.",
+      });
     }
     onClose();
   };
 
   return (
-    <Modal
-      title={projectToEdit ? "Editar Proyecto" : "Crear Nuevo Proyecto"}
-      visible={visible}
-      onOk={handleOk}
-      onCancel={onClose}
-      okText={projectToEdit ? "Actualizar" : "Crear"}
-    >
-      <div>
-        <Input
-          placeholder="Nombre del proyecto"
-          value={projectName}
-          onChange={(e) => setProjectName(e.target.value)}
-        />
-      </div>
-      <div style={{ marginTop: 16 }}>
-        <Input.TextArea
-          placeholder="Descripción del proyecto"
-          value={projectDescription}
-          onChange={(e) => setProjectDescription(e.target.value)}
-          rows={4}
-        />
-      </div>
-    </Modal>
+    <>
+      {contextHolder}
+      <Modal
+        title={projectToEdit ? "Editar Proyecto" : "Crear Nuevo Proyecto"}
+        visible={visible}
+        onOk={handleOk}
+        onCancel={onClose}
+        okText={projectToEdit ? "Actualizar" : "Crear"}
+      >
+        <div>
+          <Input
+            placeholder="Nombre del proyecto"
+            value={projectName}
+            onChange={(e) => setProjectName(e.target.value)}
+          />
+        </div>
+        <div style={{ marginTop: 16 }}>
+          <Input.TextArea
+            placeholder="Descripción del proyecto"
+            value={projectDescription}
+            onChange={(e) => setProjectDescription(e.target.value)}
+            rows={4}
+          />
+        </div>
+      </Modal>
+    </>
   );
 };
 
