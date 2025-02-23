@@ -11,8 +11,13 @@ import { AppState } from "#store/store.ts";
 import { selectTasksForProject } from "#modules/projects/projet.selector.ts";
 import { Task, removeTask } from "#modules/tasks/tasks.reducer.ts";
 import { removeTaskFromProject } from "#modules/projects/project.reducer.ts";
-import { ArrowLeftOutlined, PlusCircleOutlined } from "@ant-design/icons";
+import {
+  ArrowLeftOutlined,
+  EditOutlined,
+  PlusCircleOutlined,
+} from "@ant-design/icons";
 import TaskFilters from "#molecules/taskFilters/TaskFilter.tsx";
+import ProjectModalForm from "#molecules/projectModalForm/ProjectModalForm.tsx";
 
 const ProjectDetail = () => {
   const { projectId } = useParams<{ projectId: string }>();
@@ -23,11 +28,15 @@ const ProjectDetail = () => {
   const project = useSelector((state: AppState) =>
     state.projects.projects.find((p: Project) => p.id === projectIdNumber)
   );
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const [isTaskModalVisible, setIsTaskModalVisible] = useState(false);
   const [taskToEdit, setTaskToEdit] = useState<Task | undefined>(undefined);
 
   const [isTaskConfirmVisible, setIsTaskConfirmVisible] = useState(false);
   const [taskToDelete, setTaskToDelete] = useState<Task | null>(null);
+  const [projectToEdit, setProjectToEdit] = useState<Project | undefined>(
+    undefined
+  );
 
   if (!project) return <div>No se encontró el proyecto.</div>;
 
@@ -69,6 +78,19 @@ const ProjectDetail = () => {
       }
       return 0;
     });
+
+  const closeModal = () => {
+    setIsModalVisible(false);
+    setProjectToEdit(undefined);
+  };
+
+  const handleEditProject = () => {
+    const projectEdit = project;
+    if (projectEdit) {
+      setProjectToEdit(projectEdit);
+      setIsModalVisible(true);
+    }
+  };
 
   const handleEditTask = (id: number) => {
     const task = tasks.find((t: Task) => t.id === id);
@@ -126,6 +148,14 @@ const ProjectDetail = () => {
           <h2>{project.name}</h2>
           <p>{project.description}</p>
         </div>
+        <Tooltip title="Editar projecto">
+          <Button
+            onClick={() => handleEditProject()}
+            type="primary"
+            shape="circle"
+            icon={<EditOutlined />}
+          />
+        </Tooltip>
         <Tooltip title="Crear">
           <Button
             onClick={() => {
@@ -137,6 +167,11 @@ const ProjectDetail = () => {
             icon={<PlusCircleOutlined />}
           />
         </Tooltip>
+        <ProjectModalForm
+          visible={isModalVisible}
+          onClose={closeModal}
+          projectToEdit={projectToEdit}
+        />
       </div>
 
       <TaskFilters onFiltersChange={handleFiltersChange} />
