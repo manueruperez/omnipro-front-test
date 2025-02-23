@@ -160,25 +160,21 @@ const ProjectDetail = () => {
             <h2>{project.name}</h2>
             <p>{project.description}</p>
           </div>
-          <Tooltip title="Editar proyecto">
-            <Button
-              onClick={() => handleEditProject()}
-              type="primary"
-              shape="circle"
-              icon={<EditOutlined />}
-            />
-          </Tooltip>
-          <Tooltip title="Crear tarea">
-            <Button
-              onClick={() => {
-                setTaskToEdit(undefined);
-                setIsTaskModalVisible(true);
-              }}
-              type="primary"
-              shape="circle"
-              icon={<PlusCircleOutlined />}
-            />
-          </Tooltip>
+
+          <Button onClick={() => handleEditProject()} type="text">
+            Editar proyecto <EditOutlined />
+          </Button>
+
+          <Button
+            onClick={() => {
+              setTaskToEdit(undefined);
+              setIsTaskModalVisible(true);
+            }}
+            type="primary"
+          >
+            Crear tarea <PlusCircleOutlined />
+          </Button>
+
           <ProjectModalForm
             visible={isModalVisible}
             onClose={closeModal}
@@ -201,14 +197,20 @@ const ProjectDetail = () => {
         />
 
         <div className="flex flex-col items-center gap-[16px]">
-          {filteredTasks.map((task: Task) => (
-            <TaskCard
-              key={task.id}
-              task={task}
-              onEditClick={handleEditTask}
-              onDeleteClick={handleDeleteTask}
-            />
-          ))}
+          {filteredTasks.length > 0 ? (
+            filteredTasks.map((task: Task) => (
+              <TaskCard
+                key={task.id}
+                task={task}
+                onEditClick={handleEditTask}
+                onDeleteClick={handleDeleteTask}
+              />
+            ))
+          ) : (
+            <div className="flex flex-col w-full h-[300px] justify-center">
+              <h2 className="text-xl">No tienes tareas en este proyecto !!!</h2>
+            </div>
+          )}
         </div>
 
         <ConfirmationModal

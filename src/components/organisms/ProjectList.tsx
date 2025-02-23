@@ -75,27 +75,28 @@ const ProjectList = () => {
     <>
       {contextHolder}
       <div className="flex flex-col justify-between gap-2">
-        <div className="flex flex-row justify-between items-center w-full">
+        <div className="flex flex-col justify-between items-center w-full">
           <Divider orientation="left">Tus Proyectos</Divider>
-          <Tooltip title="Crear">
-            <Button
-              onClick={showModal}
-              type="primary"
-              shape="circle"
-              icon={<PlusCircleOutlined />}
-            />
-          </Tooltip>
+          <Button onClick={showModal} type="primary">
+            Nuevo proyecto
+          </Button>
         </div>
         <div className="flex flex-col items-center gap-4">
-          {projects.map((project: Project) => (
-            <ProjectCard
-              key={project.id}
-              project={project}
-              onClick={() => handleNavigation(`/projects/${project.id}`)}
-              onEditClick={handleEditProject}
-              onDeleteClick={handleDeleteProject}
-            />
-          ))}
+          {projects.length > 0 ? (
+            projects.map((project: Project) => (
+              <ProjectCard
+                key={project.id}
+                project={project}
+                onClick={() => handleNavigation(`/projects/${project.id}`)}
+                onEditClick={handleEditProject}
+                onDeleteClick={handleDeleteProject}
+              />
+            ))
+          ) : (
+            <div className="flex flex-col w-full h-[400px] items-center justify-center">
+              <h1 className="text-xl">No tienes proyectos aún</h1>
+            </div>
+          )}
           <ProjectModalForm
             visible={isModalVisible}
             onClose={closeModal}
