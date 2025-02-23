@@ -4,7 +4,7 @@ type ThemeState = {
   theme: "light" | "dark";
 };
 
-const initialState: ThemeState = { theme: "dark" };
+const initialState: ThemeState = { theme: "light" };
 
 const themeSlice = createSlice({
   name: "themeSlice",
