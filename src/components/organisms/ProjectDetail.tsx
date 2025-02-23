@@ -12,6 +12,7 @@ import { selectTasksForProject } from "#modules/projects/projet.selector.ts";
 import { Task, removeTask } from "#modules/tasks/tasks.reducer.ts";
 import { removeTaskFromProject } from "#modules/projects/project.reducer.ts";
 import { ArrowLeftOutlined, PlusCircleOutlined } from "@ant-design/icons";
+import TaskFilters from "#molecules/taskFilters/TaskFilter.tsx";
 
 const ProjectDetail = () => {
   const { projectId } = useParams<{ projectId: string }>();
@@ -25,7 +26,6 @@ const ProjectDetail = () => {
   const [isTaskModalVisible, setIsTaskModalVisible] = useState(false);
   const [taskToEdit, setTaskToEdit] = useState<Task | undefined>(undefined);
 
-  // Estados para el modal de confirmación de eliminación de tarea
   const [isTaskConfirmVisible, setIsTaskConfirmVisible] = useState(false);
   const [taskToDelete, setTaskToDelete] = useState<Task | null>(null);
 
@@ -37,6 +37,39 @@ const ProjectDetail = () => {
   );
   const tasks = useSelector((state: AppState) => projectTasksSelector(state));
 
+  const [filters, setFilters] = useState({
+    status: "all",
+    priority: "all",
+    orderBy: "recent",
+  });
+
+  const handleFiltersChange = (newFilters: {
+    status: string;
+    priority: string;
+    orderBy: string;
+  }) => {
+    setFilters(newFilters);
+  };
+
+  const filteredTasks = tasks
+    .filter((task: Task) =>
+      filters.status === "all" ? true : task.status === filters.status
+    )
+    .filter((task: Task) =>
+      filters.priority === "all" ? true : task.priority === filters.priority
+    )
+    .sort((a: Task, b: Task) => {
+      const timeA = a.dueDate ? new Date(a.dueDate).getTime() : 0;
+      const timeB = b.dueDate ? new Date(b.dueDate).getTime() : 0;
+
+      if (filters.orderBy === "recent") {
+        return timeB - timeA;
+      } else if (filters.orderBy === "oldest") {
+        return timeA - timeB;
+      }
+      return 0;
+    });
+
   const handleEditTask = (id: number) => {
     const task = tasks.find((t: Task) => t.id === id);
     if (task) {
@@ -45,7 +78,6 @@ const ProjectDetail = () => {
     }
   };
 
-  // Al hacer clic en eliminar una tarea, se muestra el modal de confirmación
   const handleDeleteTask = (id: number) => {
     const task = tasks.find((t: Task) => t.id === id);
     if (task) {
@@ -54,7 +86,6 @@ const ProjectDetail = () => {
     }
   };
 
-  // Si el usuario confirma la eliminación, despacha las acciones correspondientes
   const handleConfirmTaskDelete = () => {
     if (taskToDelete) {
       dispatch(removeTask(taskToDelete.id));
@@ -69,7 +100,6 @@ const ProjectDetail = () => {
     setTaskToDelete(null);
   };
 
-  // Si se cancela, simplemente se cierra el modal
   const handleCancelTaskDelete = () => {
     setIsTaskConfirmVisible(false);
     setTaskToDelete(null);
@@ -98,13 +128,18 @@ const ProjectDetail = () => {
         </div>
         <Tooltip title="Crear">
           <Button
-            onClick={() => navigate(-1)}
+            onClick={() => {
+              setTaskToEdit(undefined);
+              setIsTaskModalVisible(true);
+            }}
             type="primary"
             shape="circle"
             icon={<PlusCircleOutlined />}
           />
         </Tooltip>
       </div>
+
+      <TaskFilters onFiltersChange={handleFiltersChange} />
 
       <TaskModalForm
         visible={isTaskModalVisible}
@@ -116,9 +151,8 @@ const ProjectDetail = () => {
         taskToEdit={taskToEdit}
       />
 
-      <h3>Tareas</h3>
       <div className="flex flex-col items-center gap-[16px]">
-        {tasks.map((task: Task) => (
+        {filteredTasks.map((task: Task) => (
           <TaskCard
             key={task.id}
             task={task}
