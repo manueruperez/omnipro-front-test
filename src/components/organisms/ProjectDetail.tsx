@@ -2,7 +2,7 @@
 import { useState, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { Button } from "antd";
+import { Button, Tooltip } from "antd";
 import { Project } from "#modules/projects/project.reducer.ts";
 import TaskModalForm from "#molecules/taskModalForm/TaskModalForm.tsx";
 import TaskCard from "#atoms/taskCard/TaskCard.tsx";
@@ -11,6 +11,7 @@ import { AppState } from "#store/store.ts";
 import { selectTasksForProject } from "#modules/projects/projet.selector.ts";
 import { Task, removeTask } from "#modules/tasks/tasks.reducer.ts";
 import { removeTaskFromProject } from "#modules/projects/project.reducer.ts";
+import { ArrowLeftOutlined, PlusCircleOutlined } from "@ant-design/icons";
 
 const ProjectDetail = () => {
   const { projectId } = useParams<{ projectId: string }>();
@@ -75,22 +76,35 @@ const ProjectDetail = () => {
   };
 
   return (
-    <div>
-      <Button onClick={() => navigate(-1)} style={{ marginBottom: 16 }}>
-        Volver
-      </Button>
-      <h2>{project.name}</h2>
-      <p>{project.description}</p>
-
-      <Button
-        type="primary"
-        onClick={() => {
-          setTaskToEdit(undefined);
-          setIsTaskModalVisible(true);
+    <div className="projectDetailWrapper flex flex-col justify-between gap-10">
+      <div
+        className="projectDataWrapper flex flex-row gap-5 items-center justify-between p-3"
+        style={{
+          background: "var(--primary-transparent)",
+          borderRadius: "10px",
         }}
       >
-        Agregar Tarea
-      </Button>
+        <Tooltip title="Regresar">
+          <Button
+            onClick={() => navigate(-1)}
+            type="dashed"
+            shape="circle"
+            icon={<ArrowLeftOutlined />}
+          />
+        </Tooltip>
+        <div className="flex flex-col items-start gap-2 w-full">
+          <h2>{project.name}</h2>
+          <p>{project.description}</p>
+        </div>
+        <Tooltip title="Crear">
+          <Button
+            onClick={() => navigate(-1)}
+            type="primary"
+            shape="circle"
+            icon={<PlusCircleOutlined />}
+          />
+        </Tooltip>
+      </div>
 
       <TaskModalForm
         visible={isTaskModalVisible}

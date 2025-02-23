@@ -19,7 +19,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   return (
     <Card
       hoverable
-      style={{ width: 300, margin: "1rem", cursor: "pointer" }}
+      style={{ width: 300, cursor: "pointer" }}
       actions={[
         <EditOutlined key="edit" onClick={() => onEditClick(project.id)} />,
         <DeleteOutlined

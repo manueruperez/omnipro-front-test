@@ -18,7 +18,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
     <Card
       title={task.title}
       hoverable
-      style={{ width: 300, margin: "1rem", cursor: "pointer" }}
+      style={{ width: 300, cursor: "pointer" }}
       actions={[
         <EditOutlined key="edit" onClick={() => onEditClick(task.id)} />,
         <DeleteOutlined key="delete" onClick={() => onDeleteClick(task.id)} />,

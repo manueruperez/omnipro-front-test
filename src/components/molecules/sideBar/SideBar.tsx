@@ -57,10 +57,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         items={itemsLabels}
         onClick={handleMenuClick}
         style={{
-          background:
-            currentTheme === "light"
-              ? "var(--white-transparent)"
-              : "--black-transparent",
+          background: "none",
         }}
       />
     </Sider>
