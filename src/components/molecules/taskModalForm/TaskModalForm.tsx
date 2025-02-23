@@ -1,6 +1,14 @@
 // src/molecules/TaskModalForm.tsx
 import React, { useEffect } from "react";
-import { Modal, Form, Input, DatePicker, Select, Button } from "antd";
+import {
+  Modal,
+  Form,
+  Input,
+  DatePicker,
+  Select,
+  Button,
+  notification,
+} from "antd";
 import { useDispatch } from "react-redux";
 import { addTask, updateTask, Task } from "#modules/tasks/tasks.reducer.ts";
 import { addTaskToProject } from "#modules/projects/project.reducer.ts";
@@ -22,6 +30,8 @@ const TaskModalForm: React.FC<TaskModalFormProps> = ({
   const [form] = Form.useForm();
   const dispatch = useDispatch();
 
+  const [api, contextHolder] = notification.useNotification();
+
   useEffect(() => {
     if (taskToEdit) {
       form.setFieldsValue({
@@ -38,7 +48,6 @@ const TaskModalForm: React.FC<TaskModalFormProps> = ({
 
   const onFinish = (values: any) => {
     if (taskToEdit) {
-      // Modo edición: actualiza la tarea existente
       const updatedTask: Task = {
         ...taskToEdit,
         title: values.title,
@@ -48,8 +57,11 @@ const TaskModalForm: React.FC<TaskModalFormProps> = ({
         priority: values.priority,
       };
       dispatch(updateTask(updatedTask));
+      api.success({
+        message: "Tarea Actualizada",
+        description: "La tarea se actualizó correctamente.",
+      });
     } else {
-      // Modo creación: agrega una nueva tarea
       const taskData: Omit<Task, "id"> = {
         title: values.title,
         description: values.description,
@@ -60,6 +72,10 @@ const TaskModalForm: React.FC<TaskModalFormProps> = ({
       const actionResult = dispatch(addTask(taskData));
       const newTaskId = actionResult.payload.id;
       dispatch(addTaskToProject({ projectId, taskId: newTaskId }));
+      api.success({
+        message: "Tarea Agregada",
+        description: "La tarea se agregó correctamente.",
+      });
     }
 
     form.resetFields();
@@ -67,60 +83,63 @@ const TaskModalForm: React.FC<TaskModalFormProps> = ({
   };
 
   return (
-    <Modal
-      title={taskToEdit ? "Editar Tarea" : "Agregar Tarea"}
-      open={visible}
-      onCancel={onClose}
-      footer={null}
-    >
-      <Form form={form} layout="vertical" onFinish={onFinish}>
-        <Form.Item
-          name="title"
-          label="Título"
-          rules={[{ required: true, message: "Por favor ingresa un título" }]}
-        >
-          <Input />
-        </Form.Item>
+    <>
+      {contextHolder}
+      <Modal
+        title={taskToEdit ? "Editar Tarea" : "Agregar Tarea"}
+        open={visible}
+        onCancel={onClose}
+        footer={null}
+      >
+        <Form form={form} layout="vertical" onFinish={onFinish}>
+          <Form.Item
+            name="title"
+            label="Título"
+            rules={[{ required: true, message: "Por favor ingresa un título" }]}
+          >
+            <Input />
+          </Form.Item>
 
-        <Form.Item name="description" label="Descripción">
-          <Input.TextArea />
-        </Form.Item>
+          <Form.Item name="description" label="Descripción">
+            <Input.TextArea />
+          </Form.Item>
 
-        <Form.Item name="dueDate" label="Fecha de vencimiento">
-          <DatePicker />
-        </Form.Item>
+          <Form.Item name="dueDate" label="Fecha de vencimiento">
+            <DatePicker />
+          </Form.Item>
 
-        <Form.Item
-          name="status"
-          label="Estado"
-          initialValue="Pendiente"
-          rules={[{ required: true, message: "Selecciona el estado" }]}
-        >
-          <Select>
-            <Select.Option value="Pendiente">Pendiente</Select.Option>
-            <Select.Option value="Completada">Completada</Select.Option>
-          </Select>
-        </Form.Item>
+          <Form.Item
+            name="status"
+            label="Estado"
+            initialValue="Pendiente"
+            rules={[{ required: true, message: "Selecciona el estado" }]}
+          >
+            <Select>
+              <Select.Option value="Pendiente">Pendiente</Select.Option>
+              <Select.Option value="Completada">Completada</Select.Option>
+            </Select>
+          </Form.Item>
 
-        <Form.Item
-          name="priority"
-          label="Prioridad"
-          rules={[{ required: true, message: "Selecciona la prioridad" }]}
-        >
-          <Select>
-            <Select.Option value="Baja">Baja</Select.Option>
-            <Select.Option value="Media">Media</Select.Option>
-            <Select.Option value="Alta">Alta</Select.Option>
-          </Select>
-        </Form.Item>
+          <Form.Item
+            name="priority"
+            label="Prioridad"
+            rules={[{ required: true, message: "Selecciona la prioridad" }]}
+          >
+            <Select>
+              <Select.Option value="Baja">Baja</Select.Option>
+              <Select.Option value="Media">Media</Select.Option>
+              <Select.Option value="Alta">Alta</Select.Option>
+            </Select>
+          </Form.Item>
 
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
-            {taskToEdit ? "Actualizar Tarea" : "Agregar Tarea"}
-          </Button>
-        </Form.Item>
-      </Form>
-    </Modal>
+          <Form.Item>
+            <Button type="primary" htmlType="submit">
+              {taskToEdit ? "Actualizar Tarea" : "Agregar Tarea"}
+            </Button>
+          </Form.Item>
+        </Form>
+      </Modal>
+    </>
   );
 };
 

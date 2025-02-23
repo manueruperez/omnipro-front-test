@@ -2,7 +2,7 @@
 import { useState, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { Button, Divider, Tooltip } from "antd";
+import { Button, Divider, Tooltip, notification } from "antd";
 import { Project } from "#modules/projects/project.reducer.ts";
 import TaskModalForm from "#molecules/taskModalForm/TaskModalForm.tsx";
 import TaskCard from "#atoms/taskCard/TaskCard.tsx";
@@ -37,6 +37,9 @@ const ProjectDetail = () => {
   const [projectToEdit, setProjectToEdit] = useState<Project | undefined>(
     undefined
   );
+
+  // Hook de notificaciones de Ant Design
+  const [api, contextHolder] = notification.useNotification();
 
   if (!project) return <div>No se encontró el proyecto.</div>;
 
@@ -117,6 +120,11 @@ const ProjectDetail = () => {
           taskId: taskToDelete.id,
         })
       );
+      // Mostrar notificación de eliminación exitosa
+      api.success({
+        message: "Tarea Eliminada",
+        description: "La tarea se eliminó correctamente.",
+      });
     }
     setIsTaskConfirmVisible(false);
     setTaskToDelete(null);
@@ -128,87 +136,90 @@ const ProjectDetail = () => {
   };
 
   return (
-    <div className="projectDetailWrapper flex flex-col justify-between gap-10">
-      <Divider orientation="left">Detalles de projecto</Divider>
+    <>
+      {contextHolder}
+      <div className="projectDetailWrapper flex flex-col justify-between gap-10">
+        <Divider orientation="left">Detalles de proyecto</Divider>
 
-      <div
-        className="projectDataWrapper flex flex-row gap-5 items-center justify-between p-3"
-        style={{
-          background: "var(--primary-transparent)",
-          borderRadius: "10px",
-        }}
-      >
-        <Tooltip title="Regresar">
-          <Button
-            onClick={() => navigate(-1)}
-            type="dashed"
-            shape="circle"
-            icon={<ArrowLeftOutlined />}
+        <div
+          className="projectDataWrapper flex flex-row gap-5 items-center justify-between p-3"
+          style={{
+            background: "var(--primary-transparent)",
+            borderRadius: "10px",
+          }}
+        >
+          <Tooltip title="Regresar">
+            <Button
+              onClick={() => navigate(-1)}
+              type="dashed"
+              shape="circle"
+              icon={<ArrowLeftOutlined />}
+            />
+          </Tooltip>
+          <div className="flex flex-col items-start gap-2 w-full">
+            <h2>{project.name}</h2>
+            <p>{project.description}</p>
+          </div>
+          <Tooltip title="Editar proyecto">
+            <Button
+              onClick={() => handleEditProject()}
+              type="primary"
+              shape="circle"
+              icon={<EditOutlined />}
+            />
+          </Tooltip>
+          <Tooltip title="Crear tarea">
+            <Button
+              onClick={() => {
+                setTaskToEdit(undefined);
+                setIsTaskModalVisible(true);
+              }}
+              type="primary"
+              shape="circle"
+              icon={<PlusCircleOutlined />}
+            />
+          </Tooltip>
+          <ProjectModalForm
+            visible={isModalVisible}
+            onClose={closeModal}
+            projectToEdit={projectToEdit}
           />
-        </Tooltip>
-        <div className="flex flex-col items-start gap-2 w-full">
-          <h2>{project.name}</h2>
-          <p>{project.description}</p>
         </div>
-        <Tooltip title="Editar projecto">
-          <Button
-            onClick={() => handleEditProject()}
-            type="primary"
-            shape="circle"
-            icon={<EditOutlined />}
-          />
-        </Tooltip>
-        <Tooltip title="Crear">
-          <Button
-            onClick={() => {
-              setTaskToEdit(undefined);
-              setIsTaskModalVisible(true);
-            }}
-            type="primary"
-            shape="circle"
-            icon={<PlusCircleOutlined />}
-          />
-        </Tooltip>
-        <ProjectModalForm
-          visible={isModalVisible}
-          onClose={closeModal}
-          projectToEdit={projectToEdit}
+        <Divider orientation="right">Filtros de tareas</Divider>
+
+        <TaskFilters onFiltersChange={handleFiltersChange} />
+        <Divider orientation="left">Listado de tareas</Divider>
+
+        <TaskModalForm
+          visible={isTaskModalVisible}
+          onClose={() => {
+            setIsTaskModalVisible(false);
+            setTaskToEdit(undefined);
+          }}
+          projectId={project.id}
+          taskToEdit={taskToEdit}
+        />
+
+        <div className="flex flex-col items-center gap-[16px]">
+          {filteredTasks.map((task: Task) => (
+            <TaskCard
+              key={task.id}
+              task={task}
+              onEditClick={handleEditTask}
+              onDeleteClick={handleDeleteTask}
+            />
+          ))}
+        </div>
+
+        <ConfirmationModal
+          visible={isTaskConfirmVisible}
+          message="¿Estás seguro de eliminar esta tarea?"
+          onAccept={handleConfirmTaskDelete}
+          onReject={handleCancelTaskDelete}
+          onClose={handleCancelTaskDelete}
         />
       </div>
-      <Divider orientation="right">Filtros de tareas</Divider>
-
-      <TaskFilters onFiltersChange={handleFiltersChange} />
-      <Divider orientation="left">Listado de tareas</Divider>
-
-      <TaskModalForm
-        visible={isTaskModalVisible}
-        onClose={() => {
-          setIsTaskModalVisible(false);
-          setTaskToEdit(undefined);
-        }}
-        projectId={project.id}
-        taskToEdit={taskToEdit}
-      />
-
-      <div className="flex flex-col items-center gap-[16px]">
-        {filteredTasks.map((task: Task) => (
-          <TaskCard
-            key={task.id}
-            task={task}
-            onEditClick={handleEditTask}
-            onDeleteClick={handleDeleteTask}
-          />
-        ))}
-      </div>
-
-      <ConfirmationModal
-        visible={isTaskConfirmVisible}
-        message="¿Estás seguro de eliminar esta tarea?"
-        onAccept={handleConfirmTaskDelete}
-        onReject={handleCancelTaskDelete}
-        onClose={handleCancelTaskDelete}
-      />
-    </div>
+    </>
   );
 };
 
