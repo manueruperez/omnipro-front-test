@@ -6,12 +6,12 @@ import { useState } from "react";
 import { Outlet } from "react-router-dom";
 
 const { Content, Footer } = Layout;
-const { useBreakpoint } = Grid; // Detectar tamaño de pantalla
+const { useBreakpoint } = Grid;
 
 const MainLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [drawerVisible, setDrawerVisible] = useState(false);
-  const screens = useBreakpoint(); // Detectar tamaño de pantalla
+  const screens = useBreakpoint();
 
   const menuItems = [
     { label: "Home", route: "/" },
@@ -22,7 +22,6 @@ const MainLayout = () => {
     <Layout style={{ minHeight: "100vh" }}>
       <Navbar onMenuClick={() => setDrawerVisible(true)} />
       <Layout>
-        {/* Sidebar solo visible en pantallas grandes */}
         {screens.md && (
           <Sidebar
             menuItems={menuItems}
@@ -50,7 +49,7 @@ const MainLayout = () => {
             <Outlet />
           </Content>
           <Footer style={{ textAlign: "center" }}>
-            © {new Date().getFullYear()} Mi Aplicación
+            © {new Date().getFullYear()} Task Project Manager
           </Footer>
         </Layout>
       </Layout>

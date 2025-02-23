@@ -1,10 +1,10 @@
 import { Layout, Grid, Switch, theme } from "antd";
 import ButtonIcon from "#atoms/buttonIcon/ButtonIcon.tsx";
-import Title from "#atoms/title/Title.tsx";
 import { useSelector, useDispatch } from "react-redux";
 import { AppState } from "#store/store.ts";
 import { toggleTheme } from "#modules/theme/theme.reducer.ts";
 import "./navBar.css";
+import { MoonOutlined, SunOutlined } from "@ant-design/icons";
 
 const { Header } = Layout;
 const { useBreakpoint } = Grid;
@@ -22,23 +22,19 @@ const Navbar: React.FC<NavbarProps> = ({ onMenuClick }) => {
     dispatch(toggleTheme());
   };
 
-  // Obtenemos el token que se actualiza según el tema
   const {
     token: { colorBgContainer },
   } = theme.useToken();
 
   return (
-    <Header
-      className="HeaderWrapper"
-      style={{ background: colorBgContainer }} // Aplica el color de fondo del token
-    >
+    <Header className="HeaderWrapper" style={{ background: colorBgContainer }}>
       {!screens.md && <ButtonIcon onClick={onMenuClick} />}
-      <h1> Mi Aplicación</h1>
+      <h1>Task Project Manager</h1>
       <Switch
         checked={currentTheme === "dark"}
         onChange={handleThemeToggle}
-        checkedChildren="Dark"
-        unCheckedChildren="Light"
+        checkedChildren={<MoonOutlined />}
+        unCheckedChildren={<SunOutlined />}
       />
     </Header>
   );

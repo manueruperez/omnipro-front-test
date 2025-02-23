@@ -20,6 +20,6 @@ export const darkTheme: ThemeConfig = {
 
     colorText: "#ffffff",
 
-    colorBgContainer: "#4d4d4d",
+    colorBgContainer: "#1a1a1a",
   },
 };

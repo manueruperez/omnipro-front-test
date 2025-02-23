@@ -8,7 +8,11 @@ interface ButtonIconProps {
 const ButtonIcon: React.FC<ButtonIconProps> = ({ onClick }) => (
   <Button
     type="text"
-    icon={<MenuOutlined style={{ color: "white", fontSize: "18px" }} />}
+    icon={
+      <MenuOutlined
+        style={{ color: "var(--primary-color)", fontSize: "18px" }}
+      />
+    }
     onClick={onClick}
   />
 );

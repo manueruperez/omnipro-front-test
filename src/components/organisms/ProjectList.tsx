@@ -2,11 +2,12 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Button } from "antd";
+import { Button, Tooltip } from "antd";
 import { Project, removeProject } from "#modules/projects/project.reducer.ts";
 import ProjectModalForm from "#molecules/projectModalForm/ProjectModalForm.tsx";
 import ProjectCard from "#atoms/projectCard/ProjectCard.tsx";
 import ConfirmationModal from "#molecules/confirmationModal/ConfirmationModal.tsx";
+import { PlusCircleOutlined } from "@ant-design/icons";
 
 const ProjectList = () => {
   const navigate = useNavigate();
@@ -64,11 +65,18 @@ const ProjectList = () => {
   };
 
   return (
-    <div>
-      <h2>Lista de Proyectos</h2>
-      <Button type="primary" onClick={showModal}>
-        Crear Nuevo Proyecto
-      </Button>
+    <div className="flex flex-col justify-between gap-2">
+      <div className="flex flex-row justify-between items-center w-full">
+        <h2>Lista de Proyectos</h2>
+        <Tooltip title="Crear">
+          <Button
+            onClick={showModal}
+            type="primary"
+            shape="circle"
+            icon={<PlusCircleOutlined />}
+          />
+        </Tooltip>
+      </div>
       <div className="flex flex-col items-center">
         {projects.map((project: Project) => (
           <ProjectCard
