@@ -30,8 +30,14 @@ const TaskFilters: React.FC<TaskFiltersProps> = ({ onFiltersChange }) => {
   };
 
   return (
-    <div className="flex flex-col justify-center gap-4 items-center">
-      <div></div>
+    <div
+      className="flex flex-col justify-between gap-4 items-center p-5"
+      style={{
+        background: "var(--white-transparent)",
+        borderRadius: "10px",
+        boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+      }}
+    >
       <RadioFilter
         label="Estado"
         value={status}
