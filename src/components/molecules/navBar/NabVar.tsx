@@ -27,9 +27,12 @@ const Navbar: React.FC<NavbarProps> = ({ onMenuClick }) => {
   } = theme.useToken();
 
   return (
-    <Header className="HeaderWrapper" style={{ background: colorBgContainer }}>
+    <Header
+      className="HeaderWrapper p-4"
+      style={{ background: colorBgContainer }}
+    >
       {!screens.md && <ButtonIcon onClick={onMenuClick} />}
-      <h1>Task Project Manager</h1>
+      <h1 className="text-xl font-bold mb-4">Administrador de projectos</h1>
       <Switch
         checked={currentTheme === "dark"}
         onChange={handleThemeToggle}

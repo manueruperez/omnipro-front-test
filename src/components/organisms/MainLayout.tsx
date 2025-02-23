@@ -15,7 +15,7 @@ const MainLayout = () => {
 
   const menuItems = [
     { label: "Home", route: "/" },
-    { label: "Projects", route: "/projects" },
+    { label: "Projectos", route: "/projects" },
   ];
 
   return (
