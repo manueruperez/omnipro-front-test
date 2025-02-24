@@ -11,14 +11,14 @@ const Home = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen ">
       {/* Hero Section */}
       <main className="container mx-auto px-4 py-12">
         <section className="text-center mb-12">
-          <h2 className="text-4xl font-bold mb-4 text-gray-800">
+          <h2 className="text-4xl font-bold mb-4 ">
             Bienvenido a Mi Aplicación
           </h2>
-          <p className="text-gray-600 mb-6">
+          <p className=" mb-6">
             Una aplicación web de gestión de tareas que permite a los usuarios
             administrar sus proyectos y tareas.
           </p>
@@ -38,18 +38,18 @@ const Home = () => {
                 hoverable
                 title={
                   <span className="flex items-center">
-                    <ProjectOutlined className="mr-2 text-blue-500" />
+                    <ProjectOutlined className="mr-2 " />
                     Gestión de Proyectos
                   </span>
                 }
                 bordered={false}
                 className="shadow-lg"
               >
-                <p className="text-gray-700">
+                <p className="">
                   Crear, renombrar y eliminar proyectos, organizando las tareas
                   dentro de cada uno.
                 </p>
-                <ul className="mt-2 list-disc ml-5 text-gray-600">
+                <ul className="mt-2 list-disc ml-5 ">
                   <li>Crear</li>
                   <li>Editar</li>
                   <li>Eliminar</li>
@@ -70,11 +70,11 @@ const Home = () => {
                 bordered={false}
                 className="shadow-lg"
               >
-                <p className="text-gray-700">
+                <p className="">
                   Cada tarea cuenta con título (obligatorio), descripción, fecha
                   de vencimiento, estado y prioridad.
                 </p>
-                <ul className="mt-2 list-disc ml-5 text-gray-600">
+                <ul className="mt-2 list-disc ml-5 ">
                   <li>Crear</li>
                   <li>Editar</li>
                   <li>Eliminar</li>
@@ -95,11 +95,11 @@ const Home = () => {
                 bordered={false}
                 className="shadow-lg"
               >
-                <p className="text-gray-700">
+                <p className="">
                   Filtrar tareas por estado (pendiente/completada) y prioridad,
                   y ordenarlas por fecha de vencimiento.
                 </p>
-                <ul className="mt-2 list-disc ml-5 text-gray-600">
+                <ul className="mt-2 list-disc ml-5 ">
                   <li>Estado: pendiente / completado</li>
                   <li>Prioridad: Baja, Media, Alta</li>
                   <li>Fecha: ordenar de más reciente a más antigua</li>
@@ -119,7 +119,7 @@ const Home = () => {
                 bordered={false}
                 className="shadow-lg"
               >
-                <p className="text-gray-700">
+                <p className="">
                   Se cuenta con persistencia de datos a través del local
                   storage.
                 </p>
@@ -138,7 +138,7 @@ const Home = () => {
                 bordered={false}
                 className="shadow-lg"
               >
-                <ul className="mt-2 list-disc ml-5 text-gray-600">
+                <ul className="mt-2 list-disc ml-5 ">
                   <li>Diseño limpio y responsive</li>
                   <li>Feedback visual y loaders</li>
                   <li>Navegación mediante teclado</li>
@@ -159,7 +159,7 @@ const Home = () => {
                 bordered={false}
                 className="shadow-lg"
               >
-                <ul className="mt-2 list-disc ml-5 text-gray-600">
+                <ul className="mt-2 list-disc ml-5 ">
                   <li>
                     <strong>Frameworks:</strong> React (vite, ts)
                   </li>
