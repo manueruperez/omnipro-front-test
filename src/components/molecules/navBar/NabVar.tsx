@@ -29,16 +29,25 @@ const Navbar: React.FC<NavbarProps> = ({ onMenuClick }) => {
   return (
     <Header
       className="HeaderWrapper p-4"
-      style={{ background: colorBgContainer }}
+      style={{
+        background: colorBgContainer,
+        display: "flex",
+        justifyContent: "center",
+      }}
     >
-      {!screens.md && <ButtonIcon onClick={onMenuClick} />}
-      <h1 className="text-xl font-bold mb-4">Administrador de projectos</h1>
-      <Switch
-        checked={currentTheme === "dark"}
-        onChange={handleThemeToggle}
-        checkedChildren={<MoonOutlined />}
-        unCheckedChildren={<SunOutlined />}
-      />
+      <div
+        className="flex flex-row w-full justify-between items-center al"
+        style={{ maxWidth: 1080 }}
+      >
+        {!screens.md && <ButtonIcon onClick={onMenuClick} />}
+        <h1 className="text-xl font-bold mb-4">Administrador de projectos</h1>
+        <Switch
+          checked={currentTheme === "dark"}
+          onChange={handleThemeToggle}
+          checkedChildren={<MoonOutlined />}
+          unCheckedChildren={<SunOutlined />}
+        />
+      </div>
     </Header>
   );
 };

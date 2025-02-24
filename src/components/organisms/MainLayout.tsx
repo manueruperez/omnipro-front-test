@@ -37,11 +37,16 @@ const MainLayout = () => {
           />
         )}
 
-        <Layout style={{ padding: "16px" }}>
+        <Layout
+          className="flex flex-col items-center"
+          style={{ padding: "16px" }}
+        >
           <Content
             style={{
               padding: 24,
               minHeight: 280,
+              width: "100%",
+              maxWidth: 1080,
             }}
           >
             <Outlet />

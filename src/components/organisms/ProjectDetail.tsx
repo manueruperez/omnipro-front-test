@@ -181,7 +181,7 @@ const ProjectDetail = () => {
             projectToEdit={projectToEdit}
           />
         </div>
-        <Divider orientation="right">Filtros de tareas</Divider>
+        <Divider orientation="left">Filtros de tareas</Divider>
 
         <TaskFilters onFiltersChange={handleFiltersChange} />
         <Divider orientation="left">Listado de tareas</Divider>
